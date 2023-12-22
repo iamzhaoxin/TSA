@@ -1,0 +1,102 @@
+Unknown tag in constant pool: 16 at entry 83
+Warning: java.util.concurrent.ConcurrentMap is a phantom class!
+Unknown tag in constant pool: 16 at entry 39
+Warning: java.lang.CharSequence is a phantom class!
+Unknown tag in constant pool: 16 at entry 918
+Warning: java.io.ObjectInputStream is a phantom class!
+Unknown tag in constant pool: 16 at entry 613
+Warning: java.util.Arrays is a phantom class!
+Unknown tag in constant pool: 16 at entry 1064
+Warning: java.util.regex.Pattern is a phantom class!
+Unknown tag in constant pool: 16 at entry 134
+Warning: java.util.Comparator is a phantom class!
+Unknown tag in constant pool: 16 at entry 67
+Warning: java.lang.reflect.AnnotatedElement is a phantom class!
+Unknown tag in constant pool: 16 at entry 79
+Warning: java.util.Map$Entry is a phantom class!
+Unknown tag in constant pool: 16 at entry 26
+Warning: java.util.function.BiConsumer is a phantom class!
+Unknown tag in constant pool: 16 at entry 27
+Warning: java.util.function.BiFunction is a phantom class!
+Unknown tag in constant pool: 16 at entry 35
+Warning: java.util.function.Function is a phantom class!
+Unknown tag in constant pool: 16 at entry 374
+Warning: java.net.SocketPermission is a phantom class!
+Unknown tag in constant pool: 16 at entry 26
+Warning: java.util.function.Consumer is a phantom class!
+Unknown tag in constant pool: 16 at entry 20
+Warning: java.util.function.UnaryOperator is a phantom class!
+Unknown tag in constant pool: 16 at entry 44
+Warning: java.util.function.Predicate is a phantom class!
+Unknown tag in constant pool: 16 at entry 817
+Warning: java.io.ObjectStreamClass is a phantom class!
+Unknown tag in constant pool: 16 at entry 209
+Warning: java.nio.CharBuffer is a phantom class!
+Unknown tag in constant pool: 16 at entry 29
+Warning: java.util.function.IntUnaryOperator is a phantom class!
+Unknown tag in constant pool: 16 at entry 29
+Warning: java.util.function.BinaryOperator is a phantom class!
+Unknown tag in constant pool: 16 at entry 29
+Warning: java.util.function.LongUnaryOperator is a phantom class!
+Unknown tag in constant pool: 16 at entry 30
+Warning: java.util.function.IntPredicate is a phantom class!
+Unknown tag in constant pool: 16 at entry 22
+Warning: java.util.function.IntConsumer is a phantom class!
+Unknown tag in constant pool: 16 at entry 52
+Warning: java.util.PrimitiveIterator$OfInt is a phantom class!
+Unknown tag in constant pool: 16 at entry 47
+Warning: java.util.Spliterator$OfInt is a phantom class!
+Unknown tag in constant pool: 16 at entry 30
+Warning: java.util.function.LongPredicate is a phantom class!
+Unknown tag in constant pool: 16 at entry 22
+Warning: java.util.function.LongConsumer is a phantom class!
+Unknown tag in constant pool: 16 at entry 52
+Warning: java.util.PrimitiveIterator$OfLong is a phantom class!
+Unknown tag in constant pool: 16 at entry 47
+Warning: java.util.Spliterator$OfLong is a phantom class!
+Unknown tag in constant pool: 16 at entry 30
+Warning: java.util.function.DoublePredicate is a phantom class!
+Unknown tag in constant pool: 16 at entry 29
+Warning: java.util.function.DoubleUnaryOperator is a phantom class!
+Unknown tag in constant pool: 16 at entry 22
+Warning: java.util.function.DoubleConsumer is a phantom class!
+Unknown tag in constant pool: 16 at entry 52
+Warning: java.util.PrimitiveIterator$OfDouble is a phantom class!
+Unknown tag in constant pool: 16 at entry 47
+Warning: java.util.Spliterator$OfDouble is a phantom class!
+Unknown tag in constant pool: 16 at entry 295
+Warning: java.time.Instant is a phantom class!
+Unknown tag in constant pool: 16 at entry 447
+Warning: java.time.LocalDateTime is a phantom class!
+Unknown tag in constant pool: 16 at entry 386
+Warning: java.time.LocalTime is a phantom class!
+[Call Graph] For information on where the call graph may be incomplete, use the verbose option to the cg phase.
+[Spark] Pointer Assignment Graph in 0.3 seconds.
+[Spark] Type masks in 0.0 seconds.
+[Spark] Pointer Graph simplified in 0.0 seconds.
+[Spark] Propagation in 1.6 seconds.
+[Spark] Solution found in 1.6 seconds.
+Transforming jdk.internal.misc.TerminatingThreadLocal... 
+Transforming jdk.internal.misc.TerminatingThreadLocal$1... 
+Transforming EXAMPC... 
+Transforming Buffer... 
+Transforming NewProducerConsumerTest... 
+Transforming org.junit.Test... 
+Transforming NewProducerConsumerTest$Thread3... 
+Transforming NewProducerConsumerTest$Thread2... 
+Transforming org.junit.Test$None... 
+****************************************************
+* 6 Shared Access Locations *
+****************************************************
+Buffer|produce|13
+Buffer|produce|17
+Buffer|consume|23
+Buffer|produce|16
+Buffer|consume|27
+Buffer|consume|26
+****************************************************
+* shared/total 10/27 *
+****************************************************
+****************************************************
+Total abstract threads: 3 *
+****************************************************

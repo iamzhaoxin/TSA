@@ -71,32 +71,25 @@ Warning: java.time.LocalDateTime is a phantom class!
 Unknown tag in constant pool: 16 at entry 386
 Warning: java.time.LocalTime is a phantom class!
 [Call Graph] For information on where the call graph may be incomplete, use the verbose option to the cg phase.
-[Spark] Pointer Assignment Graph in 0.3 seconds.
+[Spark] Pointer Assignment Graph in 0.1 seconds.
 [Spark] Type masks in 0.0 seconds.
 [Spark] Pointer Graph simplified in 0.0 seconds.
-[Spark] Propagation in 1.6 seconds.
-[Spark] Solution found in 1.6 seconds.
+[Spark] Propagation in 0.3 seconds.
+[Spark] Solution found in 0.3 seconds.
 Transforming jdk.internal.misc.TerminatingThreadLocal... 
 Transforming jdk.internal.misc.TerminatingThreadLocal$1... 
-Transforming EXAMPC... 
-Transforming Buffer... 
-Transforming NewProducerConsumerTest... 
-Transforming org.junit.Test... 
-Transforming NewProducerConsumerTest$Thread3... 
-Transforming NewProducerConsumerTest$Thread2... 
-Transforming org.junit.Test$None... 
+Transforming MyExample... 
+Transforming MyExample$Thread1... 
 ****************************************************
-* 6 Shared Access Locations *
+* 4 shared.Shared Access Locations *
 ****************************************************
-Buffer|produce|13
-Buffer|produce|17
-Buffer|consume|23
-Buffer|produce|16
-Buffer|consume|27
-Buffer|consume|26
+MyExample$Thread1|run|30
+MyExample|main|13
+MyExample|main|14
+MyExample$Thread1|run|29
 ****************************************************
-* shared/total 10/27 *
+* shared/total 4/18 *
 ****************************************************
 ****************************************************
-Total abstract threads: 3 *
+Total abstract threads: 2 *
 ****************************************************

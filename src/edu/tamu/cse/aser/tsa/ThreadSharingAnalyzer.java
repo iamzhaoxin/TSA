@@ -530,7 +530,7 @@ private void runTLOA() {
     	    	{
   				sharedAccesses++;
 
-  				if(Main.printDebug)System.err.println("Shared: "+stmt);
+  				if(Main.printDebug)System.err.println("shared.Shared: "+stmt);
 	    			//String sig_loc = (className + "|" + methodSignature + "|" + line_cur)
 	    			String sig_loc = (sc.getName() + "|" + m.getName() + "|" + Util.getLineNumber(stmt));
 	    			sharedVariableLocations.add(sig_loc);
@@ -724,7 +724,7 @@ private void runStaticTSA() {
 			      	    	{
 			    				sharedAccesses++;
 
-			    				if(Main.printDebug)System.err.println("Shared: "+stmt);
+			    				if(Main.printDebug)System.err.println("shared.Shared: "+stmt);
 			      	    		
 			      	    		{
 			      	    			//String sig_loc = (className + "|" + methodSignature + "|" + line_cur)
@@ -769,7 +769,7 @@ private void runStaticTSA() {
 	 println(
               "****************************************************");
 	  println("* "+sharedVariableLocations.size()+
-              " Shared Access Locations *");
+              " shared.Shared Access Locations *");
           println(
               "****************************************************");
 		for (String s: sharedVariableLocations) 

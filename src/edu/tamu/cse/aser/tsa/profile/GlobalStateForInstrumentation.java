@@ -139,7 +139,7 @@ public class GlobalStateForInstrumentation {
 	            System.out.println(
 	                    "****************************************************");
 	                System.out.println("* "+sharedVariables.size()+
-	                    " Shared Field Variables *");
+	                    " shared.Shared Field Variables *");
 	                System.out.println(
 	                    "****************************************************");
 			      	for (String s: sharedVariables) 
@@ -166,7 +166,7 @@ public class GlobalStateForInstrumentation {
 		            System.out.println(
 		                    "****************************************************");
 		                System.out.println("* "+sharedFieldLocations.size()+
-		                    " Shared Field Access Locations *");
+		                    " shared.Shared Field Access Locations *");
 		                System.out.println(
 		                    "****************************************************");
 				      	for (String s:sharedFieldLocations ) 
@@ -177,7 +177,7 @@ public class GlobalStateForInstrumentation {
 		            System.out.println(
 		                    "****************************************************");
 		                System.out.println("* "+sharedArrayLocations.size()+
-		                    " Shared Array Access Locations *");
+		                    " shared.Shared Array Access Locations *");
 		                System.out.println(
 		                    "****************************************************");
 				      	for (String s: sharedArrayLocations) 

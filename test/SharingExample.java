@@ -43,9 +43,9 @@ public class SharingExample {
 		for (int i = 0; i < 2; i++) {
 			synchronized (lock) {
 				x = 1;
-//				for (int j = 0; j < 8; j++) {
+				for (int j = 0; j < 8; j++) {
 					y = 1;
-//				}
+				}
 			}
 		}
 		try {

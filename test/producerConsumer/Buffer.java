@@ -1,3 +1,5 @@
+package producerConsumer;
+
 public class Buffer {
     private int[] data;
     private int size;

@@ -5,26 +5,19 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 public class TestRunner {
-    public static void main(String[] args) {
-        Result result = JUnitCore.runClasses(EXAMPCUnitTest.class);
-
-        for (Failure failure : result.getFailures()) {
-            System.err.println(failure.toString());
-        }
-
-        System.out.println("Tests successful? " + result.wasSuccessful());
-
-        // Exit with a status code indicating success or failure
-        System.exit(result.wasSuccessful() ? 0 : 1);
-    }
 
     @Test
     public void test1(){
-        Main.main(new String[]{"EXAMPC"});
+        Main.main(new String[]{"producerConsumer.ProducerAndConsumerTest"});
     }
 
     @Test
     public void test2(){
-        Main.main(new String[]{"EXAM"});
+        Main.main(new String[]{"shared.Example"});
+    }
+
+    @Test
+    public void test3(){
+        Main.main(new String[]{"MyExample"});
     }
 }

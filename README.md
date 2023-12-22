@@ -6,7 +6,7 @@ If you find TSA useful, please cite our ICSE'16 paper "**Scalable Thread Sharing
 
 # Command line usage
 * Static TSA:
-`java -jar tsa.jar Example`
+`java -jar tsa.jar shared.Example`
 
 TSA also supports user-specified entry method, which can be configured in `tsa.conf`: `tsa.entry=test`. `test` is the entry method name. For example, try
 
@@ -14,7 +14,7 @@ TSA also supports user-specified entry method, which can be configured in `tsa.c
 
 
 * Dynamic TSA:
-`java -javaagent:lib/profile-agent.jar -cp tsa.jar Example`
+`java -javaagent:lib/profile-agent.jar -cp tsa.jar shared.Example`
 
 # External libraries
 [Soot](http://sable.github.io/soot/) -- A Java optimization framework

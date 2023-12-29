@@ -1,10 +1,7 @@
 package edu.tamu.cse.aser.tsa.profile;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -107,8 +104,12 @@ public class GlobalStateForInstrumentation {
 //	        totalAccesses+=allArraySet.size();
 	        
 	        sharedVariables = new HashSet<String>();
-	        sharedFieldLocations = new HashSet<String>(); 
+	        sharedFieldLocations = new HashSet<String>();
 
+//			System.out.println("测试 variableIdMap");
+//			System.out.println(variableIdMap);
+//			System.out.println("测试 ProfileRuntime.sharedVariableIds");
+//			System.out.println(ProfileRuntime.sharedVariableIds);
 	        // show variableId
 	        for (Map.Entry<String, Integer> entry : variableIdMap.entrySet()) {
 	            Integer id = entry.getValue();
@@ -130,10 +131,10 @@ public class GlobalStateForInstrumentation {
 //	            if(set!=null) totalAccesses+=set.size();
 	            
 	        }
-	        
 
 
-	
+//			System.out.println("测试 sharedVariables");
+//			System.out.println(sharedVariables);
 	        if (Config.instance.verbose) {
 	        	
 	            System.out.println(
@@ -152,11 +153,21 @@ public class GlobalStateForInstrumentation {
 			      	
 			      	sharedVariableLocations.addAll(sharedFieldLocations);
 			      	sharedVariableLocations.addAll(sharedArrayLocations);
+
 			     // Serialize / save it
 				  	  try {
-				  		  ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("tmp/sharedLocations"));
-				  		oos.writeObject(sharedVariableLocations);
-				  		oos.close();
+						  // 使用 FileOutputStream 创建一个写入特定文件的输出流
+						  FileOutputStream fos = new FileOutputStream("sharedLocations.txt");
+						  // 创建一个 OutputStreamWriter，显式指定字符集为 UTF-8
+						  // 并将 FileOutputStream 作为参数传递
+						  OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
+						  // 写入数据
+						  osw.write(sharedVariableLocations.toString());
+						  // 关闭写入器
+						  osw.close();
+//				  		  ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("tmp/sharedLocations"));
+//				  		oos.writeObject(sharedVariableLocations);
+//				  		oos.close();
 				  	} catch (IOException e) {
 				  		// TODO Auto-generated catch block
 				  		e.printStackTrace();
@@ -192,8 +203,6 @@ public class GlobalStateForInstrumentation {
 	                    .size() / variableIdMap.entrySet().size());
 	            double sarray_percent = size_array == 0 ? 0
 	                    : ((double) (sharedArraySet.size()+sharedArrayIds.size()) / arrayIdMap.entrySet().size());
-				System.out.println("测试内容");
-				System.out.println(svar_percent);
 	            System.out.println("\nSHARED VARIABLE PERCENTAGE: " + svar_percent);
 	            System.out.println("SHARED ARRAY PERCENTAGE: " + sarray_percent);
 	            	       

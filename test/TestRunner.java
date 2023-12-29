@@ -20,4 +20,9 @@ public class TestRunner {
     public void test3(){
         Main.main(new String[]{"MyExample"});
     }
+
+    @Test
+    public void test4(){
+        Main.main(new String[]{"Example1"});
+    }
 }

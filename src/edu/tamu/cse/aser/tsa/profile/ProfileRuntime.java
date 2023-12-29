@@ -1,12 +1,17 @@
 package edu.tamu.cse.aser.tsa.profile;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class ProfileRuntime {
 
-	static HashMap<Long, Integer> threadTidIndexMap;
+    static HashMap<Long, Integer> threadTidIndexMap;
     public static HashSet<Integer> sharedVariableIds;
 
     public static HashSet<String> sharedArrayWithIndexsString;
@@ -26,13 +31,13 @@ public class ProfileRuntime {
     static ThreadLocal<HashSet<Integer>> threadLocalIDSet2;
 
 
-    static HashMap<String,HashSet<Long>> dataWriteThreadsMap;
-    static HashMap<String,HashSet<Long>> dataReadThreadsMap;
+    static HashMap<String, HashSet<Long>> dataWriteThreadsMap;
+    static HashMap<String, HashSet<Long>> dataReadThreadsMap;
 
-    
-	public static void init() {
-		
-		sharedVariableIds = new HashSet<Integer>();
+
+    public static void init() {
+
+        sharedVariableIds = new HashSet<Integer>();
         writeThreadMap = new HashMap<Integer, Long>();
         readThreadMap = new HashMap<Integer, long[]>();
 
@@ -41,17 +46,16 @@ public class ProfileRuntime {
         writeThreadArrayWithIndexStringMap = new HashMap<String, Long>();
         readThreadArrayWithIndexStringMap = new HashMap<String, long[]>();
 
-        
-        
+
         sharedArrayIds = new HashSet<Integer>();
         arrayIdsMap = new HashMap<Integer, HashSet<Integer>>();
         writeThreadArrayMap = new HashMap<Integer, Long>();
         readThreadArrayMap = new HashMap<Integer, long[]>();
 
-        
-        dataWriteThreadsMap = new HashMap<String,HashSet<Long>>();
-        dataReadThreadsMap = new HashMap<String,HashSet<Long>>();
-        
+
+        dataWriteThreadsMap = new HashMap<String, HashSet<Long>>();
+        dataReadThreadsMap = new HashMap<String, HashSet<Long>>();
+
         threadLocalIDSet = new ThreadLocal<HashSet<Integer>>() {
             @Override
             protected HashSet<Integer> initialValue() {
@@ -68,8 +72,8 @@ public class ProfileRuntime {
 
             }
         };
-        
-        
+
+
         final long start_time = System.currentTimeMillis();
         //add shutdown hook
 
@@ -80,87 +84,114 @@ public class ProfileRuntime {
         });
 
 
-	}
+    }
 
-	public static void accessLocation(int ID)
-	{
-		//System.out.println("At Location "+ID+" "+(write?"write":"read")+" memory "+address);//+"_"+index;//array";
+    public static void accessLocation(int ID) {
+        //System.out.println("At Location "+ID+" "+(write?"write":"read")+" memory "+address);//+"_"+index;//array";
 
-	}
-	
-	//MUST INCLUDE CONSTRUCTORS AS DATA RACE CAN OCCUR THERE 
-	
-	/**
-	 * 
-	 * @param ID: program location
-	 * @param o: runtime object
-	 * @param SID: array index or shared variable signature id
-	 * @param write: is write or read
-	 */
-	public static void access(int ID, Object o, int SID, boolean write)
-	{
+    }
+
+    //MUST INCLUDE CONSTRUCTORS AS DATA RACE CAN OCCUR THERE
+
+    /**
+     * @param ID:    program location
+     * @param o:     runtime object
+     * @param SID:   array index or shared variable signature id
+     * @param write: is write or read
+     */
+    public static void access(int ID, Object o, int SID, boolean write) {
         // instance-based approach consumes too much memory
-		
-		//for  field only
 
-         String sig = o==null?"."+SID:System.identityHashCode(o)+"."+SID;
-         if (!sharedVariableIds.contains(SID)) {
+        //for  field only
+        String sig = o == null ? "." + SID : System.identityHashCode(o) + "." + SID;
+//        if (write) {
+//            System.out.println("ProfileRuntime#sharedVariableIds" + sharedVariableIds);
+//            System.out.println("ProfileRuntime#dataWriteThreadsMap" + dataWriteThreadsMap);
+//            System.out.println("ProfileRuntime#线程id" + Thread.currentThread().getId());
+//            System.out.println(sig);
+//        }
+        if (o != null) {
+            Class<?> objClass = o.getClass();
+            if (!objClass.getName().startsWith("org")) {
+                System.out.println("Inspecting object of type: " + objClass.getName());
 
-             long tid = Thread.currentThread().getId();
-             
-	         if(write)
-	         {
-	        	 HashSet<Long> wtids = dataWriteThreadsMap.get(sig);
-	        	 if(wtids==null)
-	        	 {
-	        		 wtids = new HashSet<Long>();
-	        		 dataWriteThreadsMap.put(sig, wtids);
-	        	 }
-	        	 
-	        	 wtids.add(tid);
-	        	 if(wtids.size()>1)sharedVariableIds.add(SID);
-	        	 else
-	        	 {
-	        		 if (dataReadThreadsMap.containsKey(sig)) {
-	        			 HashSet<Long> rtids = dataReadThreadsMap.get(sig);
-                         if (rtids != null
-                                 && (rtids.size()>1 || !rtids.contains(tid))) {
-                             sharedVariableIds.add(SID);
-                         }
-                     }
+                // 遍历所有字段
+                Field[] fields = objClass.getDeclaredFields();
+                for (Field field : fields) {
+                    field.setAccessible(true); // 使私有字段也可访问
+                    try {
+                        Object value = field.get(o);
+                        // 检查字段是否为数组
+                        if (value!=null && value.getClass().isArray()) {
+                            int length = Array.getLength(value);
+                            System.out.print("字段名: " + field.getName() + ", 字段的值: [");
+                            for (int i = 0; i < length; i++) {
+                                System.out.print(Array.get(value, i)); // 打印数组每个元素
+                                if (i < length - 1) {
+                                    System.out.print(", ");
+                                }
+                            }
+                            System.out.println("]");
+                        } else {
+                            // 对于非数组字段，直接打印
+                            System.out.println("字段名: " + field.getName() + ", 字段的值: " + value);
+                        }
+                    } catch (IllegalAccessException e) {
+                        System.out.println("Unable to access field: " + field.getName());
+                    }
+                }
+            }
+        }
+        if (!sharedVariableIds.contains(SID)) {
 
-	        	 }
-	         }
-	         else//read
-	         {
-	        	 HashSet<Long> rtids = dataReadThreadsMap.get(sig);
-	        	 if(rtids==null)
-	        	 {
-	        		 rtids = new HashSet<Long>();
-	        		 dataReadThreadsMap.put(sig, rtids);
-	        	 }
-	        	 
-	        	 rtids.add(tid);
-	        	 
-	        	 if (dataWriteThreadsMap.containsKey(sig)) {
-        			 HashSet<Long> wtids = dataWriteThreadsMap.get(sig);
-                     if (wtids!=null&&!wtids.contains(tid)) {
-                         sharedVariableIds.add(SID);
-                     }
-                 }
-	         }
-         }
-	}
+            long tid = Thread.currentThread().getId();
+
+            if (write) {
+                HashSet<Long> wtids = dataWriteThreadsMap.get(sig);
+                if (wtids == null) {
+                    wtids = new HashSet<Long>();
+                    dataWriteThreadsMap.put(sig, wtids);
+                }
+
+                wtids.add(tid);
+                if (wtids.size() > 1) sharedVariableIds.add(SID);
+                else {
+                    if (dataReadThreadsMap.containsKey(sig)) {
+                        HashSet<Long> rtids = dataReadThreadsMap.get(sig);
+                        if (rtids != null
+                                && (rtids.size() > 1 || !rtids.contains(tid))) {
+                            sharedVariableIds.add(SID);
+                        }
+                    }
+
+                }
+            } else//read
+            {
+                HashSet<Long> rtids = dataReadThreadsMap.get(sig);
+                if (rtids == null) {
+                    rtids = new HashSet<Long>();
+                    dataReadThreadsMap.put(sig, rtids);
+                }
+
+                rtids.add(tid);
+
+                if (dataWriteThreadsMap.containsKey(sig)) {
+                    HashSet<Long> wtids = dataWriteThreadsMap.get(sig);
+                    if (wtids != null && !wtids.contains(tid)) {
+                        sharedVariableIds.add(SID);
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * detect shared variables -- two conditions 1. the address is accessed by
      * more than two threads 2. at least one of them is a write
      *
-     * @param ID
-     *            -- shared variable id
-     * @param SID
-     *            -- field id
-     * @param write
-     *            or read
+     * @param ID    -- shared variable id
+     * @param SID   -- field id
+     * @param write or read
      */
     public static void access(int ID, int SID, final boolean write) {
 
@@ -180,11 +211,12 @@ public class ProfileRuntime {
 
                 long tid = Thread.currentThread().getId();
 
-                
-//                if (Config.instance.verbose) {
-//                    String readOrWrite = (write ? " write" : " read");
-//                    System.out.println("Thread " + tid + " " + readOrWrite + " variable " + SID);
-//                }
+
+                if (Config.instance.verbose) {
+                    String readOrWrite = (write ? " write" : " read");
+                    System.out.println("Thread " + tid + " " + readOrWrite + " variable " + SID);
+                }
+                System.out.println("执行了access");
                 if (!sharedVariableIds.contains(SID)) {
                     if (writeThreadMap.containsKey(SID)) {
                         if (writeThreadMap.get(SID) != tid) {
@@ -223,6 +255,7 @@ public class ProfileRuntime {
             }
         }
     }
+
     public static void accessArray(int ID, final Object o, final boolean write) {
 
         if (!threadLocalIDSet.get().contains(ID)) {
@@ -241,7 +274,7 @@ public class ProfileRuntime {
             ids.add(ID);
             long tid = Thread.currentThread().getId();
 
-            
+
 //            if (Config.instance.verbose) {
 //                String readOrWrite = (write ? " write" : " read");
 //                System.out.println("Thread " + tid + " " + readOrWrite + " array "
@@ -284,15 +317,14 @@ public class ProfileRuntime {
             }
         }
     }
-    
+
     //for array only 
     public static void accessArray(int ID, final Object o, int index, final boolean write) {
 
-    	
-    	
-        String sig = System.identityHashCode(o) +"_"+index;//array
 
-    	//System.out.println("Array ACCESS: "+sig);
+        String sig = System.identityHashCode(o) + "_" + index;//array
+
+        //System.out.println("Array ACCESS: "+sig);
 
         HashSet<Integer> ids = arrayWithIndexsStringMap.get(sig);
         if (ids == null) {
@@ -300,56 +332,57 @@ public class ProfileRuntime {
             arrayWithIndexsStringMap.put(sig, ids);
         }
         ids.add(ID);
-        
-            if (!sharedArrayWithIndexsString.contains(sig)) {
 
-            
-                long tid = Thread.currentThread().getId();
+        if (!sharedArrayWithIndexsString.contains(sig)) {
 
 
-                if (writeThreadArrayWithIndexStringMap.containsKey(sig)) {
-                	if(sig!=null)
+            long tid = Thread.currentThread().getId();
+
+
+            if (writeThreadArrayWithIndexStringMap.containsKey(sig)) {
+                if (sig != null)
                     if (writeThreadArrayWithIndexStringMap.get(sig) != tid) {
-                    	sharedArrayWithIndexsString.add(sig);
+                        sharedArrayWithIndexsString.add(sig);
+                        return;
+                    }
+            }
+
+            if (write)// write
+            {
+                if (readThreadArrayWithIndexStringMap.containsKey(sig)) {
+                    long[] readThreads = readThreadArrayWithIndexStringMap.get(sig);
+                    if (readThreads != null
+                            && (readThreads[0] != tid || (readThreads[1] > 0 && readThreads[1] != tid))) {
+                        sharedArrayWithIndexsString.add(sig);
                         return;
                     }
                 }
 
-                if (write)// write
-                {
-                    if (readThreadArrayWithIndexStringMap.containsKey(sig)) {
-                        long[] readThreads = readThreadArrayWithIndexStringMap.get(sig);
-                        if (readThreads != null
-                                && (readThreads[0] != tid || (readThreads[1] > 0 && readThreads[1] != tid))) {
-                        	sharedArrayWithIndexsString.add(sig);
-                            return;
-                        }
-                    }
+                writeThreadArrayWithIndexStringMap.put(sig, tid);
+            } else// read
+            {
+                long[] readThreads = readThreadArrayWithIndexStringMap.get(sig);
 
-                    writeThreadArrayWithIndexStringMap.put(sig, tid);
-                } else// read
-                {
-                    long[] readThreads = readThreadArrayWithIndexStringMap.get(sig);
+                if (readThreads == null) {
+                    readThreads = new long[2];
+                    readThreads[0] = tid;
+                    readThreadArrayWithIndexStringMap.put(sig, readThreads);
+                } else {
+                    if (readThreads[0] != tid)
+                        readThreads[1] = tid;
 
-                    if (readThreads == null) {
-                        readThreads = new long[2];
-                        readThreads[0] = tid;
-                        readThreadArrayWithIndexStringMap.put(sig, readThreads);
-                    } else {
-                        if (readThreads[0] != tid)
-                            readThreads[1] = tid;
-
-                    }
                 }
+            }
         }
     }
-	private static boolean isPrim(Object o) {
-		if (o instanceof Integer || o instanceof Long || o instanceof Byte
-				|| o instanceof Boolean || o instanceof Float
-				|| o instanceof Double || o instanceof Short
-				|| o instanceof Character)
-			return true;
 
-		return false;
-	}
+    private static boolean isPrim(Object o) {
+        if (o instanceof Integer || o instanceof Long || o instanceof Byte
+                || o instanceof Boolean || o instanceof Float
+                || o instanceof Double || o instanceof Short
+                || o instanceof Character)
+            return true;
+
+        return false;
+    }
 }

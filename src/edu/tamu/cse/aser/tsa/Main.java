@@ -38,7 +38,7 @@ public class Main{
 	static	boolean printDebug = true;
 	
   public static void main(String[] args) {
-    /* check the arguments */
+      /* check the arguments */
     if (args.length < 1) {
       System.err.println("Usage: java Main [options] classname");//classpath
       System.exit(1);

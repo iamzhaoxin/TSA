@@ -11,7 +11,7 @@ public class MyExample {
 
         for (int i = 0; i < 1000; i++) {
             e.a[0] = i;
-            System.out.println("main" + e.a[0]);
+            System.out.println(Thread.currentThread().getId() + "main" + e.a[0]);
         }
 
     }
@@ -27,7 +27,7 @@ public class MyExample {
 
             for (int i = 0; i < 1000; i++) {
                 o.a[0] = i * -1;
-                System.out.println("child thread: " + o.a[0]);
+                System.out.println(Thread.currentThread().getId() + "child thread: " + o.a[0]);
             }
 
         }

@@ -104,12 +104,7 @@ public class ProfileRuntime {
 
         //for  field only
         String sig = o == null ? "." + SID : System.identityHashCode(o) + "." + SID;
-//        if (write) {
-//            System.out.println("ProfileRuntime#sharedVariableIds" + sharedVariableIds);
-//            System.out.println("ProfileRuntime#dataWriteThreadsMap" + dataWriteThreadsMap);
-//            System.out.println("ProfileRuntime#线程id" + Thread.currentThread().getId());
-//            System.out.println(sig);
-//        }
+
         if (o != null) {
             Class<?> objClass = o.getClass();
             if (!objClass.getName().startsWith("org")) {

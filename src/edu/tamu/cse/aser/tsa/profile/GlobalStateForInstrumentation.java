@@ -140,7 +140,7 @@ public class GlobalStateForInstrumentation {
 	            System.out.println(
 	                    "****************************************************");
 	                System.out.println("* "+sharedVariables.size()+
-	                    " shared.Shared Field Variables *");
+	                    " Shared Field Variables *");
 	                System.out.println(
 	                    "****************************************************");
 			      	for (String s: sharedVariables) 
@@ -156,18 +156,9 @@ public class GlobalStateForInstrumentation {
 
 			     // Serialize / save it
 				  	  try {
-						  // 使用 FileOutputStream 创建一个写入特定文件的输出流
-						  FileOutputStream fos = new FileOutputStream("sharedLocations.txt");
-						  // 创建一个 OutputStreamWriter，显式指定字符集为 UTF-8
-						  // 并将 FileOutputStream 作为参数传递
-						  OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-						  // 写入数据
-						  osw.write(sharedVariableLocations.toString());
-						  // 关闭写入器
-						  osw.close();
-//				  		  ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("tmp/sharedLocations"));
-//				  		oos.writeObject(sharedVariableLocations);
-//				  		oos.close();
+						  ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("tmp/sharedLocations"));
+						  oos.writeObject(sharedVariableLocations);
+						  oos.close();
 				  	} catch (IOException e) {
 				  		// TODO Auto-generated catch block
 				  		e.printStackTrace();
@@ -177,7 +168,7 @@ public class GlobalStateForInstrumentation {
 		            System.out.println(
 		                    "****************************************************");
 		                System.out.println("* "+sharedFieldLocations.size()+
-		                    " shared.Shared Field Access Locations *");
+		                    " Shared Field Access Locations *");
 		                System.out.println(
 		                    "****************************************************");
 				      	for (String s:sharedFieldLocations ) 
@@ -188,7 +179,7 @@ public class GlobalStateForInstrumentation {
 		            System.out.println(
 		                    "****************************************************");
 		                System.out.println("* "+sharedArrayLocations.size()+
-		                    " shared.Shared Array Access Locations *");
+		                    " Shared Array Access Locations *");
 		                System.out.println(
 		                    "****************************************************");
 				      	for (String s: sharedArrayLocations) 
